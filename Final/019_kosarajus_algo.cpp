@@ -1,4 +1,8 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <stack>
+#include <unordered_map>
+#include <vector>
+
 using namespace std;
 
 void dfsR(vector<vector<int>> &adj, stack<int> &st, unordered_map<int, bool> &visited, int v)
@@ -13,7 +17,6 @@ void dfsR(vector<vector<int>> &adj, stack<int> &st, unordered_map<int, bool> &vi
                 dfsR(adj, st, visited, adj[v][i]);
             }
         }
-
         st.push(v);
     }
 }
@@ -54,31 +57,19 @@ void DFS(int v, vector<bool> &visited, vector<vector<int>> &adj)
     }
 }
 
-// returns the no of scc
 int stronglyConnectedComponents(int v, vector<vector<int>> &edges)
 {
-    // kosaraju's algorithm to determine the strongly connected components
-    // Algo
-
-    // call DFS and compute finishing time of each edge or simply compute topological sort of the graph
-    // make transpose of the graph
-    // now do the dfs concedering the nodes in the topological order
-
     vector<vector<int>> adj(v);
     vector<vector<int>> adjT(v);
 
     for (auto edge : edges)
     {
         adj[edge[0]].push_back(edge[1]);
-
-        // creating transpose graph
         adjT[edge[1]].push_back(edge[0]);
     }
 
-    // topo sort, isme cycle hoga tog dfs wala topo hi chalega kahn ni chal payga
     vector<int> topo = DFSTopo(v, adj);
 
-    // dfs using topo ordering
     int count = 0;
     vector<bool> visited(v, false);
 
@@ -86,7 +77,7 @@ int stronglyConnectedComponents(int v, vector<vector<int>> &edges)
     {
         if (!visited[topo[i]])
         {
-            count++; // we haev found 1 more scc
+            count++;
             DFS(topo[i], visited, adjT);
         }
     }
